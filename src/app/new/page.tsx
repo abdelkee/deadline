@@ -2,43 +2,29 @@
 import { redirect } from "next/navigation";
 import React from "react";
 
-const createMessage = (formData: FormData) => {
-  const name = formData.get("name");
-  const type = formData.get("type");
-  const startDate = formData.get("startDate");
-  const endDate = formData.get("endDate");
+const createItem = (formData: FormData) => {
+  const items = localStorage.getItem("itemsData");
+  const newItem = {
+    name: formData.get("name"),
+    type: formData.get("type"),
+    startDate: formData.get("startDate"),
+    endDate: formData.get("endDate"),
+  };
 
-  const storedItems = localStorage.getItem("itemsData");
-  let itemData: any = [];
-  if (!storedItems) {
-    itemData = [
-      {
-        name,
-        type,
-        startDate,
-        endDate,
-      },
-    ];
-  } else {
-    itemData = [
-      ...JSON.parse(storedItems),
-      {
-        name,
-        type,
-        startDate,
-        endDate,
-      },
-    ];
-  }
+  localStorage.setItem(
+    "itemsData",
+    items === null
+      ? JSON.stringify(Array(newItem))
+      : JSON.stringify([...JSON.parse(items), newItem])
+  );
 
-  localStorage.setItem("itemsData", JSON.stringify(itemData));
   redirect("/");
 };
 
 // -----------
 function NewItem() {
   return (
-    <form action={createMessage}>
+    <form action={createItem}>
       <div className="flex flex-col space-y-5">
         <div className="flex flex-col">
           <label htmlFor="name">Name</label>

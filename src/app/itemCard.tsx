@@ -1,6 +1,29 @@
-import React from "react";
+"use client";
+import { redirect } from "next/navigation";
+import React, { useState } from "react";
+import { CiTrash } from "react-icons/ci";
 
-export default function ItemCard({ data }: { data: any }) {
+export default function ItemCard({
+  data,
+  setChanged,
+}: {
+  data: any;
+  setChanged: any;
+}) {
+  // ----------
+  const removeItem = () => {
+    if (confirm("Remove item?")) {
+      const res = localStorage.getItem("itemsData");
+      if (res !== null) {
+        const items = JSON.parse(res);
+        const remainItems = items.filter((e: any) => e.name !== data.name);
+        localStorage.setItem("itemsData", JSON.stringify(remainItems));
+        setChanged((prev: any) => !prev);
+      }
+    }
+  };
+
+  // ------------
   const letter = data.type === "Paper" ? "P" : data.type === "Fee" ? "F" : "E";
   const letterColor =
     data.type === "Paper"
@@ -22,35 +45,47 @@ export default function ItemCard({ data }: { data: any }) {
   const endDate = new Date(data.endDate) as any;
   endDate.setHours(0, 0, 0, 0); // Set end date to midnight
 
-  // calculation of the difference between today and end
+  // calculation of the difference between today and end date
   const differenceInTime = endDate - today;
   const differenceInDays = Math.ceil(differenceInTime / (1000 * 3600 * 24));
 
   const percentage = 100 - differenceInDays / 3.65;
 
-  console.log(percentage);
-
   return (
-    <div className="flex flex-col space-y-2">
-      <div className="flex space-x-2 px-0.5 items-center">
-        <div className="font-medium">{data.name}</div>
-        <div
-          className={`${letterColor} border rounded-full w-5 h-5 text-xs place-items-center grid ${
-            percentage > 90 ? "animate-ping" : ""
-          }`}
-        >
-          {letter}
+    <div className="flex flex-col space-y-3">
+      {/* Name Section */}
+      <div className="flex px-0.5 items-center justify-between">
+        <div className="flex space-x-2 items-center">
+          <div className="font-medium">{data.name}</div>
+          <div
+            className={`${letterColor} border rounded-full w-5 h-5 text-xs place-items-center grid `}
+          >
+            {letter}
+          </div>
         </div>
+        <button className="text-red-600" onClick={removeItem}>
+          <CiTrash />
+        </button>
       </div>
-      <div className="w-full border border-gray-200 rounded-sm h-3">
+
+      {/* Bar Section */}
+      <div className="w-full border border-gray-200 rounded-sm h-2">
         <div
           className={`${barColor} h-full bg-gradient-to-tr`}
           style={{ width: `${percentage < 0 ? 0 : percentage}%` }}
         ></div>
       </div>
+
+      {/* Dates Section */}
       <div className="flex justify-between text-xs text-gray-400 px-0.5">
         <div>{data.startDate}</div>
-        <div>{data.endDate}</div>
+        <div
+          className={`${
+            percentage > 90 ? "scale-down-center text-red-500" : ""
+          }`}
+        >
+          {data.endDate}
+        </div>
       </div>
     </div>
   );
