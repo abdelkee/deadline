@@ -18,7 +18,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inconsolata.className} p-4`}>{children}</body>
+      <body className={`${inconsolata.className} p-4 text-lg font-medium`}>
+        {children}
+      </body>
     </html>
   );
 }

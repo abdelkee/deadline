@@ -52,19 +52,23 @@ export default function ItemCard({
   const percentage = 100 - differenceInDays / 3.65;
 
   return (
-    <div className="flex flex-col space-y-3">
+    <div
+      className={`${
+        percentage > 90 ? "border-red-600" : "border-gray-200"
+      } flex flex-col space-y-3 border rounded p-4 shadow bg-white`}
+    >
       {/* Name Section */}
       <div className="flex px-0.5 items-center justify-between">
         <div className="flex space-x-2 items-center">
           <div className="font-medium">{data.name}</div>
           <div
-            className={`${letterColor} border rounded-full w-5 h-5 text-xs place-items-center grid `}
+            className={`${letterColor} border-2 font-semibold rounded-full w-6 h-6 text-sm place-items-center grid `}
           >
             {letter}
           </div>
         </div>
-        <button className="text-red-600" onClick={removeItem}>
-          <CiTrash />
+        <button className="text-red-600 mr-2" onClick={removeItem}>
+          <CiTrash size={20} />
         </button>
       </div>
 

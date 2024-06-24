@@ -36,8 +36,8 @@ export default function Home() {
         <p className="border-b-2 border-b-green-400">Events: {events}</p>
       </div>
       <ItemList items={items} setChanged={setChanged} />
-      <Link href={"/new"} className="fixed bottom-5 right-5">
-        <CiCirclePlus size={32} className="text-orange-600" />
+      <Link href={"/new"} className="fixed bottom-10 right-10">
+        <CiCirclePlus size={60} className="text-orange-600" />
       </Link>
     </main>
   );
