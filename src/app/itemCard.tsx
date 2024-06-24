@@ -29,14 +29,14 @@ export default function ItemCard({
     data.type === "Paper"
       ? "border-blue-400"
       : data.type === "Fee"
-      ? "border-red-400"
+      ? "border-purple-400"
       : "border-green-400";
 
   const barColor =
     data.type === "Paper"
       ? "from-blue-300 to-blue-400"
       : data.type === "Fee"
-      ? "from-red-300 to-red-400"
+      ? "from-purple-300 to-purple-400"
       : "from-green-300 to-green-400";
 
   const today = new Date() as any;
@@ -73,16 +73,27 @@ export default function ItemCard({
       </div>
 
       {/* Bar Section */}
-      <div className="w-full border border-gray-200 rounded-sm h-2">
+      <div className="w-full border border-gray-200 rounded-sm h-1">
         <div
-          className={`${barColor} h-full bg-gradient-to-tr`}
-          style={{ width: `${percentage < 0 ? 0 : percentage}%` }}
+          className={`${barColor} h-full bg-gradient-to-tr ${
+            percentage > 100 ? "scale-down-center " : ""
+          }`}
+          style={{
+            width: `${
+              percentage < 0 ? 0 : percentage > 100 ? "100%" : percentage
+            }%`,
+          }}
         ></div>
       </div>
 
       {/* Dates Section */}
       <div className="flex justify-between text-xs text-gray-400 px-0.5">
         <div>{data.startDate}</div>
+        <div
+          className={`${differenceInDays < 0 ? "text-red-500 text-base" : ""}`}
+        >
+          {differenceInDays < 0 ? "Expired" : differenceInDays}
+        </div>
         <div
           className={`${
             percentage > 90 ? "scale-down-center text-red-500" : ""

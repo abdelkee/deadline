@@ -24,7 +24,7 @@ const createItem = (formData: FormData) => {
 // -----------
 function NewItem() {
   return (
-    <form action={createItem}>
+    <form action={createItem} className="mt-16 p-4">
       <div className="flex flex-col space-y-5">
         <div className="flex flex-col">
           <label htmlFor="name">Name</label>

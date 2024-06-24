@@ -4,7 +4,7 @@ import ItemCard from "./itemCard";
 
 function ItemList({ items, setChanged }: { items: any; setChanged: any }) {
   return (
-    <div className="md:max-w-md grid grid-cols-1 place-self-center gap-8">
+    <div className="md:max-w-md grid grid-cols-1 place-self-center gap-8 mb-24">
       {items.length == 0 ? (
         <p>empty</p>
       ) : (
