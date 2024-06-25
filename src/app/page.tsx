@@ -44,7 +44,10 @@ export default function Home() {
     <main>
       <div className="flex justify-around mb-16">
         {types.map((e, i) => (
-          <p className="bg-white border border-gray-100 shadow p-2 rounded">
+          <p
+            className="bg-white border border-gray-100 shadow p-2 rounded"
+            key={e}
+          >
             {e.charAt(0)}: {typeLength[i]}
           </p>
         ))}
