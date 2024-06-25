@@ -9,6 +9,13 @@ export default function Home() {
   const [items, setItems] = useState([]);
   const [changed, setChanged] = useState(false);
 
+  const today = new Date() as any;
+  function getDaysUntilEndDate(endDate: any) {
+    const end = new Date(endDate) as any;
+    const diffTime = end - today;
+    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  }
+
   useEffect(() => {
     // Fetch itemsData from localStorage
     const res = localStorage.getItem("itemsData");
@@ -17,6 +24,10 @@ export default function Home() {
     if (res) {
       try {
         const parsedItems = JSON.parse(res);
+        parsedItems.sort(
+          (a: any, b: any) =>
+            getDaysUntilEndDate(a.endDate) - getDaysUntilEndDate(b.endDate)
+        );
         setItems(parsedItems); // Update state with parsed data
       } catch (error) {
         console.error("Error parsing JSON from localStorage:", error);
@@ -24,16 +35,20 @@ export default function Home() {
     }
   }, [changed]);
 
-  const papers = items.filter((e: any) => e.type === "Paper").length;
-  const fees = items.filter((e: any) => e.type === "Fee").length;
-  const events = items.filter((e: any) => e.type === "Event").length;
+  const types = ["Paper", "Fee", "Event", "Medicine", "Appointment"];
+  const typeLength: any = [];
+  types.forEach((type) => {
+    typeLength.push(items.filter((e: any) => e.type === type).length);
+  });
 
   return (
     <main>
       <div className="flex justify-around mb-16">
-        <p className="border-b-2 border-b-blue-400">Papers: {papers}</p>
-        <p className="border-b-2 border-b-red-400">Fees: {fees}</p>
-        <p className="border-b-2 border-b-green-400">Events: {events}</p>
+        {types.map((e, i) => (
+          <p className="bg-white border border-gray-100 shadow p-2 rounded">
+            {e.charAt(0)}: {typeLength[i]}
+          </p>
+        ))}
       </div>
       <ItemList items={items} setChanged={setChanged} />
       <Link

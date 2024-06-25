@@ -2,12 +2,13 @@
 import { redirect } from "next/navigation";
 import React, { useState } from "react";
 import { CiTrash } from "react-icons/ci";
+import { ItemType } from "../../types.t";
 
 export default function ItemCard({
   data,
   setChanged,
 }: {
-  data: any;
+  data: ItemType;
   setChanged: any;
 }) {
   // ----------
@@ -24,20 +25,6 @@ export default function ItemCard({
   };
 
   // ------------
-  const letter = data.type === "Paper" ? "P" : data.type === "Fee" ? "F" : "E";
-  const letterColor =
-    data.type === "Paper"
-      ? "border-blue-400"
-      : data.type === "Fee"
-      ? "border-purple-400"
-      : "border-green-400";
-
-  const barColor =
-    data.type === "Paper"
-      ? "from-blue-300 to-blue-400"
-      : data.type === "Fee"
-      ? "from-purple-300 to-purple-400"
-      : "from-green-300 to-green-400";
 
   const today = new Date() as any;
   today.setHours(0, 0, 0, 0); // Set current date to midnight
@@ -51,6 +38,14 @@ export default function ItemCard({
 
   const percentage = 100 - differenceInDays / 3.65;
 
+  const barColor =
+    percentage < 40
+      ? "from-green-300 to-green-400"
+      : percentage < 80
+      ? "from-orange-300 to-orange-400"
+      : "from-red-300 to-red-400";
+
+  // --------------------
   return (
     <div
       className={`${
@@ -62,9 +57,9 @@ export default function ItemCard({
         <div className="flex space-x-2 items-center">
           <div className="font-medium">{data.name}</div>
           <div
-            className={`${letterColor} border-2 font-semibold rounded-full w-6 h-6 text-sm place-items-center grid `}
+            className={` text-white bg-gray-400 font-semibold rounded-full w-6 h-6 text-sm place-items-center grid `}
           >
-            {letter}
+            {data.type.charAt(0)}
           </div>
         </div>
         <button className="text-red-600 mr-2" onClick={removeItem}>

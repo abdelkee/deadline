@@ -48,6 +48,8 @@ function NewItem() {
             <option value="Paper">Paper</option>
             <option value="Fee">Fee</option>
             <option value="Event">Event</option>
+            <option value="Medicine">Medicine</option>
+            <option value="Appointment">Appointment</option>
           </select>
         </div>
 
