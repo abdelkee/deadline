@@ -10,20 +10,21 @@ export default function Home() {
   const [changed, setChanged] = useState(false);
 
   const today = new Date() as any;
-  function getDaysUntilEndDate(endDate: any) {
-    const end = new Date(endDate) as any;
-    const diffTime = end - today;
-    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-  }
 
   useEffect(() => {
     // Fetch itemsData from localStorage
     const res = localStorage.getItem("itemsData");
 
     // Parse JSON if res is not null or undefined
+    function getDaysUntilEndDate(endDate: any) {
+      const end = new Date(endDate) as any;
+      const diffTime = end - today;
+      return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    }
     if (res) {
       try {
         const parsedItems = JSON.parse(res);
+
         parsedItems.sort(
           (a: any, b: any) =>
             getDaysUntilEndDate(a.endDate) - getDaysUntilEndDate(b.endDate)
@@ -33,7 +34,7 @@ export default function Home() {
         console.error("Error parsing JSON from localStorage:", error);
       }
     }
-  }, [changed, getDaysUntilEndDate]);
+  }, [changed]);
 
   const types = ["Paper", "Fee", "Event", "Medicine", "Appointment"];
   const typeLength: any = [];
