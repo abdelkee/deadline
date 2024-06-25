@@ -9,12 +9,10 @@ export default function Home() {
   const [items, setItems] = useState([]);
   const [changed, setChanged] = useState(false);
 
-  const today = new Date() as any;
-
   useEffect(() => {
     // Fetch itemsData from localStorage
     const res = localStorage.getItem("itemsData");
-
+    const today = new Date() as any;
     // Parse JSON if res is not null or undefined
     function getDaysUntilEndDate(endDate: any) {
       const end = new Date(endDate) as any;
