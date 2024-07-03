@@ -4,9 +4,11 @@ import Link from "next/link";
 import { CiCirclePlus } from "react-icons/ci";
 import ItemList from "./itemList";
 import { useEffect, useState } from "react";
+import { ItemType } from "../../types.t";
 
 export default function Home() {
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState<ItemType[]>([]);
+  const [selectedType, setSelectedType] = useState("");
   const [changed, setChanged] = useState(false);
 
   useEffect(() => {
@@ -21,13 +23,16 @@ export default function Home() {
     }
     if (res) {
       try {
-        const parsedItems = JSON.parse(res);
-
+        const parsedItems = JSON.parse(res) as ItemType[];
         parsedItems.sort(
           (a: any, b: any) =>
             getDaysUntilEndDate(a.endDate) - getDaysUntilEndDate(b.endDate)
         );
-        setItems(parsedItems); // Update state with parsed data
+        const filteredItems = parsedItems.filter((i: ItemType) => {
+          if (!selectedType) return parsedItems;
+          return i.type === selectedType;
+        });
+        setItems(filteredItems); // Update state with parsed data
       } catch (error) {
         console.error("Error parsing JSON from localStorage:", error);
       }
@@ -40,16 +45,31 @@ export default function Home() {
     typeLength.push(items.filter((e: any) => e.type === type).length);
   });
 
+  const filterByType = (type: string) => {
+    if (type === selectedType) {
+      setSelectedType("");
+      setChanged((prev) => !prev);
+    } else {
+      setSelectedType(type);
+      setChanged((prev) => !prev);
+    }
+  };
+
   return (
     <main>
       <div className="flex justify-around mb-16">
         {types.map((e, i) => (
-          <p
-            className="bg-white border border-gray-100 shadow p-2 rounded"
+          <button
+            className={`${
+              selectedType === e
+                ? "bg-orange-300 shadow-none"
+                : "bg-white shadow"
+            } border border-gray-100 p-2 rounded`}
             key={e}
+            onClick={() => filterByType(e)}
           >
             {e.charAt(0)}: {typeLength[i]}
-          </p>
+          </button>
         ))}
       </div>
       <ItemList items={items} setChanged={setChanged} />
