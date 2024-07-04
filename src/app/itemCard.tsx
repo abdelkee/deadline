@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import React, { useState } from "react";
 import { CiTrash } from "react-icons/ci";
 import { ItemType } from "../../types.t";
+import { cardColor } from "./utils";
 
 export default function ItemCard({
   data,
@@ -39,27 +40,33 @@ export default function ItemCard({
   const percentage = 100 - differenceInDays / 3.65;
 
   const barColor =
-    percentage < 40
-      ? "from-green-300 to-green-400"
-      : percentage < 80
+    differenceInDays < 30
+      ? "from-red-300 to-red-400"
+      : differenceInDays < 90
       ? "from-orange-300 to-orange-400"
-      : "from-red-300 to-red-400";
+      : differenceInDays < 180
+      ? "from-yellow-300 to-yellow-400"
+      : "from-green-300 to-green-400";
 
   // --------------------
   return (
     <div
       className={`${
-        percentage > 90 ? "border-red-600" : "border-gray-200"
-      } flex flex-col space-y-3 border rounded p-4 shadow bg-white`}
+        differenceInDays < 30 ? "border-l-red-600 border-l-4" : "border-l-2"
+      } flex flex-col space-y-3  rounded p-4 shadow bg-white ${
+        cardColor[data.type]
+      } `}
     >
       {/* Name Section */}
       <div className="flex px-0.5 items-center justify-between">
         <div className="flex space-x-2 items-center">
           <div className="font-medium">{data.name}</div>
           <div
-            className={` text-white bg-gray-400 font-semibold rounded-full w-6 h-6 text-sm place-items-center grid `}
+            className={`text-xs text-gray-500 border px-2 ${
+              cardColor[data.type]
+            }`}
           >
-            {data.type.charAt(0)}
+            {data.type}
           </div>
         </div>
         <button className="text-red-600 mr-2" onClick={removeItem}>
@@ -91,7 +98,7 @@ export default function ItemCard({
         </div>
         <div
           className={`${
-            percentage > 90 ? "scale-down-center text-red-500" : ""
+            differenceInDays < 30 ? "scale-down-center text-red-500" : ""
           }`}
         >
           {data.endDate}

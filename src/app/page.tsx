@@ -5,6 +5,7 @@ import { CiCirclePlus } from "react-icons/ci";
 import ItemList from "./itemList";
 import { useEffect, useState } from "react";
 import { ItemType } from "../../types.t";
+import { cardColor } from "./utils";
 
 export default function Home() {
   const [items, setItems] = useState<ItemType[]>([]);
@@ -15,12 +16,12 @@ export default function Home() {
     // Fetch itemsData from localStorage
     const res = localStorage.getItem("itemsData");
     const today = new Date() as any;
-    // Parse JSON if res is not null or undefined
     function getDaysUntilEndDate(endDate: any) {
       const end = new Date(endDate) as any;
       const diffTime = end - today;
       return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     }
+    // Parse JSON if res is not null or undefined
     if (res) {
       try {
         const parsedItems = JSON.parse(res) as ItemType[];
@@ -58,18 +59,21 @@ export default function Home() {
   return (
     <main>
       <div className="flex justify-around mb-16">
-        {types.map((e, i) => (
-          <button
-            className={`${
-              selectedType === e
-                ? "bg-orange-300 shadow-none"
-                : "bg-white shadow"
-            } border border-gray-100 p-2 rounded`}
-            key={e}
-            onClick={() => filterByType(e)}
-          >
-            {e.charAt(0)}: {typeLength[i]}
-          </button>
+        {types.map((e: string, i) => (
+          <div className="flex flex-col items-center space-y-2">
+            <button
+              className={`${
+                selectedType === e
+                  ? "bg-orange-300 shadow-none"
+                  : "bg-white shadow"
+              } border-l ${cardColor[e]} px-3 py-1 rounded`}
+              key={e}
+              onClick={() => filterByType(e)}
+            >
+              {typeLength[i]}
+            </button>
+            <p className="text-sm">{e}</p>
+          </div>
         ))}
       </div>
       <ItemList items={items} setChanged={setChanged} />
