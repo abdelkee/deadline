@@ -60,14 +60,13 @@ export default function Home() {
     <main>
       <div className="flex justify-around mb-16">
         {types.map((e: string, i) => (
-          <div className="flex flex-col items-center space-y-2">
+          <div className="flex flex-col items-center space-y-2" key={e}>
             <button
               className={`${
                 selectedType === e
                   ? "bg-orange-300 shadow-none"
                   : "bg-white shadow"
               } border-l ${cardColor[e]} px-3 py-1 rounded`}
-              key={e}
               onClick={() => filterByType(e)}
             >
               {typeLength[i]}
