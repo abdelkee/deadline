@@ -38,7 +38,7 @@ export default function Home() {
         console.error("Error parsing JSON from localStorage:", error);
       }
     }
-  }, [changed]);
+  }, [changed, selectedType]);
 
   const types = ["Paper", "Fee", "Event", "Medicine", "Appointment"];
   const typeLength: any = [];
