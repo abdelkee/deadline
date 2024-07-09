@@ -27,7 +27,9 @@ function NewItem() {
     <form action={createItem} className="mt-16 p-4">
       <div className="flex flex-col space-y-5">
         <div className="flex flex-col">
-          <label htmlFor="name">Name</label>
+          <label htmlFor="name">
+            Name <span className="text-sm text-red-400">*</span>
+          </label>
           <input
             className="border rounded focus:border-orange-200 outline-none p-2"
             required
@@ -37,7 +39,9 @@ function NewItem() {
         </div>
 
         <div className="flex flex-col">
-          <label htmlFor="type">Type</label>
+          <label htmlFor="type">
+            Type <span className="text-sm text-red-400">*</span>
+          </label>
           <select
             required
             id="type"
@@ -64,7 +68,9 @@ function NewItem() {
         </div>
 
         <div className="flex flex-col">
-          <label htmlFor="endDate">End Date</label>
+          <label htmlFor="endDate">
+            End Date <span className="text-sm text-red-400">*</span>
+          </label>
           <input
             className="border rounded focus:border-orange-200 outline-none p-2"
             required

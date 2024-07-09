@@ -41,30 +41,35 @@ export default function ItemCard({
 
   const barColor =
     differenceInDays < 30
-      ? "from-red-300 to-red-400"
+      ? "from-red-300 to-red-500"
       : differenceInDays < 90
-      ? "from-orange-300 to-orange-400"
+      ? "from-orange-300 to-orange-500"
       : differenceInDays < 180
-      ? "from-yellow-300 to-yellow-400"
-      : "from-green-300 to-green-400";
+      ? "from-yellow-300 to-yellow-500"
+      : "from-green-300 to-green-500";
+
+  const borderColor =
+    differenceInDays < 30
+      ? "border-l-red-300"
+      : differenceInDays < 90
+      ? "border-l-orange-300"
+      : differenceInDays < 180
+      ? "border-l-yellow-300"
+      : "border-l-green-300";
 
   // --------------------
   return (
     <div
       className={`${
         differenceInDays < 30 ? "border-l-red-600 border-l-4" : "border-l-2"
-      } flex flex-col space-y-3  rounded p-4 shadow bg-white ${
-        cardColor[data.type]
-      } `}
+      } relative flex flex-col space-y-3 rounded p-4 shadow border bg-white ${borderColor} `}
     >
       {/* Name Section */}
       <div className="flex px-0.5 items-center justify-between">
         <div className="flex space-x-2 items-center">
           <div className="font-medium">{data.name}</div>
           <div
-            className={`text-xs text-gray-500 border px-2 ${
-              cardColor[data.type]
-            }`}
+            className={`text-xs text-gray-500 border border-b-0 px-2 absolute -top-3 left-2 bg-white`}
           >
             {data.type}
           </div>

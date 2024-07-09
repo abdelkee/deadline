@@ -59,7 +59,7 @@ export default function Home() {
   return (
     <main>
       <div className="flex justify-around mb-16">
-        {types.map((e: string, i) => (
+        {/* {types.map((e: string, i) => (
           <div className="flex flex-col items-center space-y-2" key={e}>
             <button
               className={`${
@@ -73,7 +73,7 @@ export default function Home() {
             </button>
             <p className="text-sm">{e}</p>
           </div>
-        ))}
+        ))} */}
       </div>
       <ItemList items={items} setChanged={setChanged} />
       <Link
