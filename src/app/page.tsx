@@ -11,6 +11,7 @@ export default function Home() {
   const [items, setItems] = useState<ItemType[]>([]);
   const [selectedType, setSelectedType] = useState("");
   const [changed, setChanged] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Fetch itemsData from localStorage
@@ -36,6 +37,8 @@ export default function Home() {
         setItems(filteredItems); // Update state with parsed data
       } catch (error) {
         console.error("Error parsing JSON from localStorage:", error);
+      } finally {
+        setLoading(false);
       }
     }
   }, [changed, selectedType]);
@@ -74,8 +77,11 @@ export default function Home() {
             <p className="text-sm">{e}</p>
           </div>
         ))} */}
+        <p>
+          {items.filter((i) => i.isDone === true).length} / {items.length} Done
+        </p>
       </div>
-      <ItemList items={items} setChanged={setChanged} />
+      <ItemList items={items} setChanged={setChanged} loading={loading} />
       <Link
         href={"/new"}
         className="fixed bottom-10 right-10 rounded-full bg-white shadow-md"

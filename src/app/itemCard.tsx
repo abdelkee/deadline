@@ -1,7 +1,7 @@
 "use client";
 import { redirect } from "next/navigation";
 import React, { useState } from "react";
-import { CiTrash } from "react-icons/ci";
+import { CiCircleCheck, CiSquareCheck, CiStop1, CiTrash } from "react-icons/ci";
 import { ItemType } from "../../types.t";
 import { cardColor } from "./utils";
 
@@ -14,7 +14,7 @@ export default function ItemCard({
 }) {
   // ----------
   const removeItem = () => {
-    if (confirm("Remove item?")) {
+    if (confirm(data.message)) {
       const res = localStorage.getItem("itemsData");
       if (res !== null) {
         const items = JSON.parse(res);
@@ -23,6 +23,20 @@ export default function ItemCard({
         setChanged((prev: any) => !prev);
       }
     }
+  };
+
+  const toggleIsDone = () => {
+    const items = localStorage.getItem("itemsData")!;
+    const itemsData = JSON.parse(items) as ItemType[];
+
+    const newItemsData = itemsData.map((item) => {
+      if (item.name === data.name) {
+        return { ...item, isDone: !item.isDone };
+      }
+      return item;
+    });
+    localStorage.setItem("itemsData", JSON.stringify(newItemsData));
+    setChanged((prev: any) => !prev);
   };
 
   // ------------
@@ -48,67 +62,95 @@ export default function ItemCard({
       ? "from-yellow-300 to-yellow-500"
       : "from-green-300 to-green-500";
 
-  const borderColor =
-    differenceInDays < 30
-      ? "border-l-red-300"
-      : differenceInDays < 90
-      ? "border-l-orange-300"
-      : differenceInDays < 180
-      ? "border-l-yellow-300"
-      : "border-l-green-300";
-
   // --------------------
   return (
     <div
-      className={`${
-        differenceInDays < 30 ? "border-l-red-600 border-l-4" : "border-l-2"
-      } relative flex flex-col space-y-3 rounded p-4 shadow border bg-white ${borderColor} `}
+      className={`relative flex flex-col space-y-3 rounded p-4 shadow border bg-white ${
+        data.isDone && "border-green-600"
+      }`}
     >
       {/* Name Section */}
       <div className="flex px-0.5 items-center justify-between">
         <div className="flex space-x-2 items-center">
-          <div className="font-medium">{data.name}</div>
-          <div
+          <p className="font-medium ">
+            {data.name}{" "}
+            {data.isDone && (
+              <span className="text-xs bg-green-500 text-white px-1 py-0.5">
+                Done
+              </span>
+            )}
+          </p>
+          <p
             className={`text-xs text-gray-500 border border-b-0 px-2 absolute -top-3 left-2 bg-white`}
           >
             {data.type}
-          </div>
+          </p>
         </div>
-        <button className="text-red-600 mr-2" onClick={removeItem}>
-          <CiTrash size={20} />
-        </button>
+
+        {/* Checkbox */}
+        {!data.isDone ? (
+          <button className="text-gray-400" onClick={toggleIsDone}>
+            <CiStop1 size={26} />
+          </button>
+        ) : (
+          <button className="text-green-600" onClick={toggleIsDone}>
+            <CiSquareCheck size={26} />
+          </button>
+        )}
       </div>
 
       {/* Bar Section */}
-      <div className="w-full border border-gray-200 rounded-sm h-1">
-        <div
-          className={`${barColor} h-full bg-gradient-to-tr ${
-            percentage > 100 ? "scale-down-center " : ""
-          }`}
-          style={{
-            width: `${
-              percentage < 0 ? 0 : percentage > 100 ? "100%" : percentage
-            }%`,
-          }}
-        ></div>
-      </div>
+      {!data.isDone ? (
+        <section className="flex flex-col space-y-3">
+          <div className="w-full border border-gray-200 rounded-sm h-1">
+            <div
+              className={`${barColor} h-full bg-gradient-to-tr ${
+                percentage > 100 ? "scale-down-center " : ""
+              }`}
+              style={{
+                width: `${
+                  percentage < 0 ? 0 : percentage > 100 ? "100%" : percentage
+                }%`,
+              }}
+            ></div>
+          </div>
 
-      {/* Dates Section */}
-      <div className="flex justify-between text-xs text-gray-400 px-0.5">
-        <div>{data.startDate}</div>
-        <div
-          className={`${differenceInDays < 0 ? "text-red-500 text-base" : ""}`}
-        >
-          {differenceInDays < 0 ? "Expired" : differenceInDays}
-        </div>
-        <div
-          className={`${
-            differenceInDays < 30 ? "scale-down-center text-red-500" : ""
-          }`}
-        >
-          {data.endDate}
-        </div>
-      </div>
+          {/* Dates Section */}
+          <div className="flex justify-between text-xs text-gray-400 px-0.5">
+            <div>{data.startDate}</div>
+            <div
+              className={`${
+                differenceInDays < 0 ? "text-red-500 text-base" : ""
+              }`}
+            >
+              {differenceInDays < 0
+                ? "Expired"
+                : differenceInDays === 0
+                ? "Today"
+                : differenceInDays}
+            </div>
+            <div
+              className={`${
+                differenceInDays < 30 ? "scale-down-center text-red-500" : ""
+              }`}
+            >
+              {data.endDate}
+            </div>
+          </div>
+        </section>
+      ) : (
+        <section>
+          <div className="flex justify-between items-center">
+            <p className="text-sm animate-charcter">{data.phrase}</p>
+            <button
+              className="bg-blue-500 text-white text-sm px-3 py-1 rounded"
+              onClick={removeItem}
+            >
+              Claim
+            </button>
+          </div>
+        </section>
+      )}
     </div>
   );
 }
