@@ -72,7 +72,7 @@ export default function ItemCard({
       {/* Name Section */}
       <div className="flex px-0.5 items-center justify-between">
         <div className="flex space-x-2 items-center">
-          <p className="font-medium ">
+          <p className="font-semibold ">
             {data.name}{" "}
             {data.isDone && (
               <span className="text-xs bg-green-500 text-white px-1 py-0.5">
@@ -90,11 +90,11 @@ export default function ItemCard({
         {/* Checkbox */}
         {!data.isDone ? (
           <button className="text-gray-400" onClick={toggleIsDone}>
-            <CiStop1 size={26} />
+            <CiStop1 size={28} />
           </button>
         ) : (
           <button className="text-green-600" onClick={toggleIsDone}>
-            <CiSquareCheck size={26} />
+            <CiSquareCheck size={28} />
           </button>
         )}
       </div>
@@ -141,9 +141,9 @@ export default function ItemCard({
       ) : (
         <section>
           <div className="flex justify-between items-center">
-            <p className="text-sm animate-charcter">{data.phrase}</p>
+            <p className="animate-charcter">{data.phrase}</p>
             <button
-              className="bg-blue-500 text-white text-sm px-3 py-1 rounded"
+              className="bg-blue-500 text-white px-3 py-1 rounded"
               onClick={removeItem}
             >
               Claim
